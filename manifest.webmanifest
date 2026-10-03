@@ -1,0 +1,22 @@
+{
+  "id": "/",
+  "name": "Street Hero",
+  "short_name": "Street Hero",
+  "description": "A free action brawler: fight monsters, beat bosses, unlock heroes with superpowers.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone"],
+  "orientation": "landscape",
+  "background_color": "#07080f",
+  "theme_color": "#07080f",
+  "categories": ["games"],
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ],
+  "screenshots": [
+    {"src": "cover.png", "sizes": "1280x720", "type": "image/png", "form_factor": "wide", "label": "Street Hero"}
+  ]
+}

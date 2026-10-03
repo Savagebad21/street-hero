@@ -1,4 +1,8 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"><title>Street Hero</title>
+<meta name="description" content="Street Hero is a free browser action brawler with a 10-land story, boss fights, unlockable heroes and superpowers. It plays on phone and PC.">
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#07080f"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Street Hero"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta property="og:type" content="website"><meta property="og:title" content="Street Hero · Rise of the Black Gate"><meta property="og:description" content="Free action brawler: fight monsters, beat bosses, unlock heroes with superpowers. Plays on phone and PC."><meta property="og:image" content="cover.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="cover.png">
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 html,body{height:100%;margin:0;background:#0a0b14;color:#e8ecff;font-family:system-ui,Segoe UI,sans-serif;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none}
@@ -14,13 +18,13 @@ h1 b{color:#fff;text-shadow:0 0 24px #fff}.big{font-size:22px;min-width:270px;pa
 #st{background:rgba(4,5,12,.78);z-index:5}#stt{font-size:clamp(18px,4vw,30px);font-weight:800;letter-spacing:3px;color:#ff4d4d}#stx{max-width:620px;font-size:clamp(14px,2.6vw,20px);line-height:1.6;min-height:5em}
 #pz{background:rgba(4,5,12,.88);z-index:6}#pz h2{margin:0;letter-spacing:6px;font-size:34px}
 #pb{position:fixed;top:4px;right:6px;width:38px;height:38px;min-width:0;padding:0;font-size:13px;border-radius:50%;display:none;z-index:4;background:rgba(0,0,0,.5)}
-#spl{background:#07080f;z-index:9;display:flex;transition:opacity .4s}.lg{font-size:clamp(40px,10vw,84px);font-weight:900;letter-spacing:6px;color:#ff4d4d;text-shadow:0 0 30px #ff4d4d}.lg b{color:#fff}
+#spl{background:linear-gradient(rgba(7,8,15,.3),rgba(7,8,15,.85)),#07080f url(splash-bg.jpg) center/cover no-repeat;z-index:9;display:flex;transition:opacity .4s}.lg{font-size:clamp(40px,10vw,84px);font-weight:900;letter-spacing:6px;color:#ff4d4d;text-shadow:0 0 30px #ff4d4d}.lg b{color:#fff}
 .bar{width:min(320px,70vw);height:8px;background:#222;border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ff4d4d,#ffd23a)}#sll{font-size:12px;color:#8890b0;min-height:1.5em}
 </style></head><body>
 <canvas id="c"></canvas>
 <div id="ui" style="display:none"><h1 id="h">STREET <b>HERO</b></h1><p id="p">Rise of the Black Gate</p><div id="mn" style="display:flex;flex-direction:column;align-items:center;gap:10px"></div></div>
 <div id="st"><div id="stt"></div><div id="stx"></div><button class="sm" id="stb" onclick="storyNext()">CONTINUE ▶</button></div>
-<div id="pz"><h2>PAUSED</h2><button onclick="tpause()">RESUME</button><button id="sndb" onclick="togSound()">SOUND: ON</button><button onclick="quitMenu()">QUIT TO MENU</button></div>
+<div id="pz"><h2>PAUSED</h2><button onclick="tpause()">RESUME</button><button id="sndb" onclick="togSound()">SOUND: ON</button><button class="sm" onclick="goFull()">FULLSCREEN / LANDSCAPE</button><button onclick="quitMenu()">QUIT TO MENU</button></div>
 <button id="pb" onclick="tpause()">❚❚</button>
 <div id="spl"><div class="lg">STREET <b>HERO</b></div><div class="bar"><i id="spb"></i></div><div id="sll">Loading…</div><button id="spg" class="big" style="display:none" onclick="splashGo()">TAP TO START</button></div>
 <script>
@@ -54,7 +58,7 @@ function view(v){V=v;menu()}
 function play(){selL=clr>=10?1:clr+1;start('campaign')}
 function menu(){const m=document.getElementById('mn');if(S!='over'){document.getElementById('h').innerHTML='STREET <b>HERO</b>';document.getElementById('p').textContent=V=='home'?'Rise of the Black Gate':V=='arcade'?'ARCADE':'ABOUT'}
 if(selL>clr+1)selL=clr+1;if(selL<1)selL=1;if(!CH[selC]||CH[selC].ul>clr)selC=0;let h='';
-if(V=='home')h='<button class="big" onclick="play()">'+(clr>=10?'PLAY AGAIN':clr?'CONTINUE · LAND '+(clr+1):'PLAY')+'</button><button class="big" onclick="view(\'arcade\')">ARCADE</button><button class="big" onclick="view(\'about\')">ABOUT</button><p style="font-size:11px;opacity:.6">v1.0</p>';
+if(V=='home')h='<button class="big" onclick="play()">'+(clr>=10?'PLAY AGAIN':clr?'CONTINUE · LAND '+(clr+1):'PLAY')+'</button><button class="big" onclick="view(\'arcade\')">ARCADE</button><button class="big" onclick="view(\'about\')">ABOUT</button>'+(INST?'<button class="sm" onclick="installApp()">⬇ INSTALL APP</button>':'')+'<p style="font-size:11px;opacity:.6">v1.0</p>';
 else if(V=='arcade'){h='<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">'+CH.map((c,i)=>{const lk=c.ul>clr;return '<button class="sm'+(i==selC?' on':'')+(lk?' lk':'')+'" onclick="pickC('+i+')">'+c.n+(lk?'<br><small>clear land '+c.ul+'</small>':'<br><small>'+c.pn+'</small>')+'</button>'}).join('')+'</div><div class="pnl"><h3>'+CH[selC].n+' · '+CH[selC].pn+'</h3>'+CH[selC].desc+'</div>';
 h+='<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center">'+Array.from({length:10},(_,i)=>{const n=i+1,lk=n>clr+1;return '<button class="sm'+(n==selL?' on':'')+(lk?' lk':'')+'" onclick="pickL('+n+')">'+n+'</button>'}).join('')+'</div><p style="font-size:13px">Land '+selL+': '+BI[selL-1].n+'</p>';
 h+='<button onclick="start(\'campaign\')">CAMPAIGN</button><button onclick="start(\'endless\')">ENDLESS SURVIVAL</button><button onclick="start(\'time\')">TIME ATTACK (90s)</button><button class="sm" onclick="view(\'home\')">◀ BACK</button>'}
@@ -87,7 +91,14 @@ function quitMenu(){PZ.style.display='none';S='menu';ui.style.display='flex';V='
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&S=='play')tpause()});
 const TIPS=['Tip: hold C to block and take far less damage','Tip: press jump twice to flip over attacks','Tip: grab small monsters and throw them into the wall','Tip: your superpower lasts 15s, then recharges','Tip: new weapons unlock as you clear lands'];let sp0=0;
 const spTm=setInterval(()=>{sp0+=2+Math.random()*3;const SB=document.getElementById('spb'),SL=document.getElementById('sll');if(sp0>=100){sp0=100;clearInterval(spTm);SL.textContent='Ready';document.getElementById('spg').style.display='block'}else SL.textContent=TIPS[Math.floor(sp0/20)%5];SB.style.width=sp0+'%'},60);
-function splashGo(){SPL.style.opacity=0;setTimeout(()=>{SPL.style.display='none'},450);A();ui.style.display='flex';menu()}
+const MOB=/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent);let INST=null;
+function lockL(){try{if(screen.orientation&&screen.orientation.lock)screen.orientation.lock('landscape').catch(()=>{})}catch(e){}}
+function goFull(){try{const d=document.documentElement,r=d.requestFullscreen||d.webkitRequestFullscreen;if(r&&!document.fullscreenElement&&!(matchMedia&&matchMedia('(display-mode: fullscreen)').matches)){const p=r.call(d);if(p&&p.then)p.then(lockL).catch(()=>{});else lockL()}else lockL()}catch(e){}}
+function installApp(){if(!INST)return;INST.prompt();INST.userChoice.then(()=>{INST=null;menu()}).catch(()=>{})}
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();INST=e;if(S=='menu'&&V=='home')menu()});
+document.addEventListener('fullscreenchange',()=>{if(MOB&&!document.fullscreenElement&&S=='play')tpause()});
+if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})});
+function splashGo(){if(MOB)goFull();SPL.style.opacity=0;setTimeout(()=>{SPL.style.display='none'},450);A();ui.style.display='flex';menu()}
 let S='menu',mode,P,CL=null,cam=0,lock=0,lockCam=0,LK=null,LEN=3000,WV=[],E=[],D=[],B=[],Pa=[],U=[],R=[],Tx=[],LG=[],lvl,left,spT,score,combo,cT,shake=0,hs=0,dropT=5,tm,banner='',bannerT=0,best=0,last=0;
 try{best=+localStorage.getItem('sh')||0}catch(e){}
 const sc=y=>.8+.45*(y-TOP)/(BOT-TOP);
